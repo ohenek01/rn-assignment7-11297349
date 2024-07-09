@@ -30,13 +30,13 @@ export default function Checkout() {
         <View style={styles.cartContainer}>
           {cart.map((item, index) => (
             <View key={index} style={styles.cartItem}>
-              <Image source={item.image} style={styles.cartImage} />
+              <Image source={{uri: item.image}} style={styles.cartImage} />
               <View style={styles.cartTextContainer}>
-                <Text style={styles.cartText}>{item.name}</Text>
-                <Text style={styles.cartSubText}>{item.cartDescription}</Text>
+                <Text style={styles.cartText}>{item.title}</Text>
+                <Text style={styles.cartSubText}>{item.description}</Text>
                 <Text style={styles.cartPriceText}>{item.price}</Text>
                 <TouchableOpacity onPress={() => removeFromCart(index)}>
-                  <Icon name='remove-circle' color='red' size={25} style={{ marginLeft: 190, marginTop: 20 }} />
+                  <Icon name='remove-circle' color='red' size={25} style={styles.iconOverlay} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: 'center',
     paddingBottom: 5,
+    fontFamily: 'georgia'
   },
   cartContainer: {
     marginTop: 40,
@@ -83,6 +84,7 @@ const styles = StyleSheet.create({
   cartItem: {
     flexDirection: 'row',
     marginBottom: 20,
+    
   },
   cartImage: {
     width: 100,
@@ -109,4 +111,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'orange'
   },
+  iconOverlay: {
+    position: 'absolute',
+    bottom: -3,
+    left: 200,
+  }
 });

@@ -1,25 +1,14 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import Checkout from './components/Checkout';
 import HomeScreen from './components/HomeScreen';
+import CustomDrawerContent from './components/CustomDrawerContent';
 import { CartProvider } from './CartContext';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { DrawerActions, useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 const Drawer = createDrawerNavigator();
 
-const CustomDrawerContent = (props) => {
-  const navigation = useNavigation();
-
-  return (
-    <DrawerContentScrollView {...props}>
-      <DrawerItemList {...props} />
-    </DrawerContentScrollView>
-  );
-};
 
 export default function App() {
   return (

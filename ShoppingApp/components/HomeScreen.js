@@ -1,68 +1,75 @@
-import React, { useContext } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { SafeAreaView, FlatList, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { CartContext } from '../CartContext';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
+import axios from 'axios';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
   const { cart, setCart } = useContext(CartContext);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('https://fakestoreapi.com/products?limit=8');
+        setProducts(response.data);
+      } catch (error) {
+        console.error(`Couldn't load Products.`);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const goToCheckout = () => {
-    navigation.navigate('Checkout', { cart, setCart });
+    navigation.navigate('Checkout');
   };
 
   const addToCart = (item) => {
-    setCart([...cart, item])
+    setCart([...cart, item]);
   };
 
-  const products = [
-    { id: 1, name: 'Office Wear', cartDescription: 'Office wear for your office', description: 'reversible angora cardigan', price: '$120', image: require('../assets/dress1.png') },
-    { id: 2, name: 'Black', cartDescription: 'Recycle Boucle Knit Cardigan Pink', description: 'reversible angora cardigan', price: '$120', image: require('../assets/dress2.png') },
-    { id: 3, name: 'Church Wear', cartDescription: 'Office wear for your office', description: 'reversible angora cardigan', price: '$120', image: require('../assets/dress3.png') },
-    { id: 4, name: 'Lamerei', cartDescription: 'Recycle Boucle Knit Cardigan Pink', description: 'reversible angora cardigan', price: '$120', image: require('../assets/dress4.png') },
-    { id: 5, name: '21WN', cartDescription: 'Office wear for your office', description: 'reversible angora cardigan', price: '$120', image: require('../assets/dress5.png') },
-    { id: 6, name: 'Lopo', cartDescription: 'Recycle Boucle Knit Cardigan Pink', description: 'reversible angora cardigan', price: '$120', image: require('../assets/dress6.png') },
-    { id: 7, name: '21WN', cartDescription: 'Office wear for your office', description: 'reversible angora cardigan', price: '$120', image: require('../assets/dress7.png') },
-    { id: 8, name: 'Lame', cartDescription: 'Recycle Boucle Knit Cardigan Pink', description: 'reversible angora cardigan', price: '$120', image: require('../assets/dress3.png') },
-  ];
+  const renderItem = ({ item }) => (
+    <View key={item.id} style={styles.product}>
+      <Image source={{ uri: item.image }} style={styles.productImage} />
+      <TouchableOpacity onPress={() => addToCart(item)}>
+        <MaterialIcons name='add-circle' size={30} style={styles.iconOverlay} />
+      </TouchableOpacity>
+      <Text style={styles.text}>{item.title}</Text>
+      <Text style={styles.priceText}>${item.price}</Text>
+    </View>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
-            <Icon name='menu' size={30} />
-          </TouchableOpacity>
-          <Image source={require('../assets/Logo.png')} />
-          <Icon name='search' size={30} />
-          <TouchableOpacity onPress={goToCheckout}>
-            <FontAwesome name='shopping-bag' size={30} />
-          </TouchableOpacity>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
+          <Icon name='menu' size={30} />
+        </TouchableOpacity>
+        <Image source={require('../assets/Logo.png')} style={styles.logo} />
+        <Icon name='search' size={30} />
+        <TouchableOpacity onPress={goToCheckout}>
+          <FontAwesome name='shopping-bag' size={30} />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.title}>
+        <Text style={{ fontSize: 30, fontFamily: 'georgia' }}>OUR STORY</Text>
+        <View style={styles.titleIcon}>
+          <Icon name='filter' size={30} style={styles.iconSpacing} />
+          <Icon name='list' size={30} style={styles.iconSpacing} />
         </View>
-        <View style={styles.title}>
-          <Text style={{ fontSize: 30, fontFamily: 'helvetica' }}>OUR STORY</Text>
-          <View style={styles.titleIcon}>
-            <Icon name='filter' size={30} style={styles.iconSpacing} />
-            <Icon name='list' size={30} style={styles.iconSpacing} />
-          </View>
-        </View>
-        <View style={styles.productContainer}>
-          {products.map((product) => (
-            <View key={product.id} style={styles.product}>
-              <Image source={product.image} />
-              <TouchableOpacity onPress={() => addToCart(product)}>
-                <MaterialIcons name='add-circle' size={30} style={styles.iconOverlay} />
-              </TouchableOpacity>
-              <Text style={styles.text}>{product.name}</Text>
-              <Text style={styles.subText}>{product.description}</Text>
-              <Text style={styles.priceText}>{product.price}</Text>
-            </View>
-          ))}
-        </View>
-      </ScrollView>
+      </View>
+      <FlatList
+        data={products}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+        numColumns={2}
+        contentContainerStyle={styles.productContainer}
+        showsVerticalScrollIndicator={false}
+      />
     </SafeAreaView>
   );
 }
@@ -91,33 +98,38 @@ const styles = StyleSheet.create({
     marginLeft: 30,
   },
   productContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginHorizontal: 35,
-    marginTop: 35,
+    paddingHorizontal: 10,
+    paddingBottom: 20,
   },
   product: {
-    position: 'relative',
+    flex: 1,
+    margin: 10,
+    backgroundColor: '#f8f8f8',
+    borderRadius: 10,
+    overflow: 'hidden',
+    alignItems: 'center',
+  },
+  productImage: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
   },
   iconOverlay: {
     position: 'absolute',
-    top: -35,
-    right: 0,
+    top: -30,
+    left: 50,
   },
   text: {
     fontSize: 20,
     fontFamily: 'arial',
     marginTop: 15,
-  },
-  subText: {
-    fontSize: 15,
-    fontFamily: 'futura',
+    textAlign: 'center',
   },
   priceText: {
     fontSize: 20,
     color: 'orange',
     marginTop: 5,
-    marginBottom: 20
-  }
+    marginBottom: 20,
+    textAlign: 'center',
+  },
 });
