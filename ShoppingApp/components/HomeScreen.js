@@ -33,14 +33,18 @@ export default function HomeScreen() {
   };
 
   const renderItem = ({ item }) => (
+    <TouchableOpacity style = {styles.productDetails}>
     <View key={item.id} style={styles.product}>
-      <Image source={{ uri: item.image }} style={styles.productImage} />
-      <TouchableOpacity onPress={() => addToCart(item)}>
-        <MaterialIcons name='add-circle' size={30} style={styles.iconOverlay} />
-      </TouchableOpacity>
+      <View style={styles.imageContainer}>
+        <Image source={{ uri: item.image }} style={styles.productImage} />
+        <TouchableOpacity onPress={() => addToCart(item)} style={styles.iconOverlay}>
+          <MaterialIcons name='add-circle' size={30} color='black' />
+        </TouchableOpacity>
+      </View>
       <Text style={styles.text}>{item.title}</Text>
       <Text style={styles.priceText}>${item.price}</Text>
     </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -84,6 +88,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginHorizontal: 20,
   },
+  logo: {
+    height: 40,
+    resizeMode: 'contain',
+  },
   title: {
     marginHorizontal: 20,
     marginTop: 40,
@@ -92,7 +100,7 @@ const styles = StyleSheet.create({
   },
   titleIcon: {
     marginTop: -5,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   iconSpacing: {
     marginLeft: 30,
@@ -109,6 +117,10 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     alignItems: 'center',
   },
+  imageContainer: {
+    width: '100%',
+    position: 'relative',
+  },
   productImage: {
     width: '100%',
     height: 200,
@@ -116,8 +128,8 @@ const styles = StyleSheet.create({
   },
   iconOverlay: {
     position: 'absolute',
-    top: -30,
-    left: 50,
+    top: 170,
+    right: 8,
   },
   text: {
     fontSize: 20,
@@ -132,4 +144,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
+  productDetails:{
+    width: '50%'
+  }
 });
