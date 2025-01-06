@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { CartContext } from '../CartContext';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 
@@ -37,6 +38,11 @@ export default function Checkout() {
                 <Text style={styles.cartPriceText}>{item.price}</Text>
                 <TouchableOpacity onPress={() => removeFromCart(index)}>
                   <Icon name='remove-circle' color='red' size={25} style={styles.iconOverlay} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Payment')}>
+                    <Icon name="add" size={30} color={'white'}/>
+                    <Text style={styles.buttonText}>Add to Cart</Text>
+                    <MaterialIcons name="favorite" size={30} color={'white'}/>
                 </TouchableOpacity>
               </View>
             </View>
@@ -115,5 +121,18 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -3,
     left: 200,
-  }
+  },
+  button: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 450,
+    marginLeft: -120,
+    backgroundColor: '#040404',
+    height: 80,
+    width: 410,
+}, 
+buttonText:{
+    color: 'white',
+},
 });

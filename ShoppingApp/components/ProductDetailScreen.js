@@ -91,9 +91,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginTop: 200,
+        marginTop: 250,
         backgroundColor: '#040404',
-        height: 71,
+        height: 80,
     }, 
     buttonText:{
         color: 'white',

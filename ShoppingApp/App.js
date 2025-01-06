@@ -8,6 +8,7 @@ import HomeScreen from './components/HomeScreen';
 import CustomDrawerContent from './components/CustomDrawerContent';
 import { CartProvider } from './CartContext';
 import ProductDetailScreen from './components/ProductDetailScreen';
+import Payment from './components/Payment';
 
 const Drawer = createDrawerNavigator();
 
@@ -41,6 +42,14 @@ export default function App() {
             options={{
               headerShown: false,
               drawerLabel: 'Checkout'
+            }}
+          />
+          <Drawer.Screen
+            name="Payment"
+            component={Payment}
+            options={{
+              headerShown: false,
+              drawerLabel: 'Payment'
             }}
           />
         </Drawer.Navigator>
